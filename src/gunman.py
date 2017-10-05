@@ -7,18 +7,20 @@ class Gunman(sprite.Sprite):
 		sprite.Sprite.__init__(self)
 
 		self.device = device
+		self.orientation = 1 if num==1 else -1
+		self.heart = []
+
 		self.sprites = self.load_sprites(filepath, 64, 64)
 		self.keyMap = {}
 		self.bang = None # the shoot
 		self.current_frame = 0
-		self.orientation = 1 if num==1 else -1
 		self.setPlayer(num, device)
 		self.restart(posX, posY)
 
 	def restart(self, posX, posY):
 		#Reiniciar atributos del personaje
 		self.state = "idle"
-		self.health = 6
+		self.health = 5
 		self.x = posX         #X inicial
 		self.y = posY         #Y inicial	
 		self.cdShoot = 0
@@ -57,6 +59,16 @@ class Gunman(sprite.Sprite):
 
 		ficha["sufferFront"] = sprite_ficha.subsurface((0, 3*64, width, height))
 		ficha["sufferBack"] = sprite_ficha.subsurface((64, 3*64, width, height))
+
+		for i in range(0,5):
+			h = load_image("assets"+os.sep+"img"+os.sep+"heart.png")
+			h_rect = h.get_rect()
+			h_rect.centerx = 768+32
+			if self.orientation == 1:
+				h_rect.centery = 64*i + 32
+			if self.orientation == -1:
+				h_rect.centery = 768/2 + 64*i + 96
+			self.heart.append([h, h_rect])
 
 		return ficha
 
