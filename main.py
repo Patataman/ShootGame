@@ -77,19 +77,26 @@ def on_update(time):
 
         bullets.update()
 
-    elif countdown <= 0:
+    #The game ends when the timmer count to 0 or some player's life goes to 0
+    elif countdown <= 0 or len(player1.heart) == 0 or len(player2.heart) == 0:
         pass
 
 def on_draw(window, tileMap):
+    #Clear the window
     window.fill((0, 0, 0))
+    #Draw the map
     tileMap.draw(window)
+    #Draw bullets
     for bullet in bullets:
         window.blit(bullet.image, bullet.rect)
 
+    #Draw the timmer
     timeCD, time_rect = draw_text(str(int(countdown)), 768+32, 768/2, 30)
     window.blit(timeCD, time_rect)
+    #Draw the characters
     window.blit(player1.image, player1.rect)
     window.blit(player2.image, player2.rect)
+    #Draw lifes
     for heart in player1.heart:
         window.blit(heart[0], heart[1])
     for heart in player2.heart:
