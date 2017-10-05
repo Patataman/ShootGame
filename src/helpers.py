@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 import sys, os
 from pygame import image, error, font
-#from pygame.locals import *
 
 # Funciones
 # ---------------------------------------------------------------------

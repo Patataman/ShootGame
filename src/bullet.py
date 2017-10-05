@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from pygame import sprite
 from pygame.locals import *
-from helpers import *
+from .helpers import *
 
 class Bullet(sprite.Sprite):
 	def __init__(self, position, vector):

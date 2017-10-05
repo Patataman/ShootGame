@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 import pygame
 from pygame.locals import *
 from src.tile import Tile
-from src.gunman import *
-from src.bullet import *
+from src.gunman import Gunman
+from src.bullet import Bullet
 
 bullets = pygame.sprite.Group()
 player1 = Gunman(1, "keyboard")

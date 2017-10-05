@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from pygame import sprite
 from pygame.locals import *
-from helpers import *
+from .helpers import *
 
 class Gunman(sprite.Sprite):
 	def __init__(self, num, device):
