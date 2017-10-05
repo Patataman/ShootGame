@@ -6,7 +6,7 @@ class Bullet(sprite.Sprite):
 	def __init__(self, position, vector):
 		sprite.Sprite.__init__(self)
 		#self.name = jsonObject['name']
-		self.image = load_image("assets/img/sprites/Bullet.png")
+		self.image = load_image("assets"+os.sep+"img"+os.sep+"sprites"+os.sep+"Bullet.png")
 		self.rect = None
 		self.x = position[0]
 		self.y = position[1]

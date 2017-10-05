@@ -3,27 +3,24 @@ from pygame.locals import *
 from .helpers import *
 
 class Gunman(sprite.Sprite):
-	def __init__(self, num, device):
+	def __init__(self, num, device, filepath, posX, posY):
 		sprite.Sprite.__init__(self)
-		#self.name = jsonObject['name']
+
 		self.device = device
-		self.sprites = self.load_sprites("assets/img/sprites/BuffSpriteTT.png", 64, 64)
-		#self.avatar = [load_image(jsonObject['avatar']),
-		#                load_image(jsonObject['avatarAlt'])]
+		self.sprites = self.load_sprites(filepath, 64, 64)
 		self.keyMap = {}
 		self.bang = None # the shoot
 		self.current_frame = 0
+		self.orientation = 1 if num==1 else -1
 		self.setPlayer(num, device)
-		self.restart()
+		self.restart(posX, posY)
 
-	def restart(self):
+	def restart(self, posX, posY):
 		#Reiniciar atributos del personaje
 		self.state = "idle"
-		self.health = 100
-		# Hacia donde mira (0 -> derecha, 4 -> izquierda)
-		self.orientacion = 0
-		self.x = 768/2         #X inicial
-		self.y = 768/4        #Y inicial
+		self.health = 6
+		self.x = posX         #X inicial
+		self.y = posY         #Y inicial	
 		self.cdShoot = 0
 		# Atributos necesario para calcular colisiones entre sprites
 		self.image = None 
@@ -53,8 +50,6 @@ class Gunman(sprite.Sprite):
 		ficha["front"] = []
 		ficha["frontAttack"] = []
 		ficha["back"] = []
-		#ficha["sufferFront"] = []
-		#ficha["sufferBack"] = []
 		for i in range(0,3):
 			ficha["front"].append(sprite_ficha.subsurface((i*64, 0*64, width, height)))
 			ficha["frontAttack"].append(sprite_ficha.subsurface((i*64, 1*64, width, height)))
@@ -94,26 +89,28 @@ class Gunman(sprite.Sprite):
 		"""
 		espacio = 0.5
 		if direction == "left":
-			if self.x <= 65: # PONER EL LIMITE DE MITAD DE ESCENARIO
+			if self.x > 115:
 				self.x -= time*espacio
 		if direction == "up":
-			if (self.y >= 65 and self.y <= 768/2) or (self.y >= 768/2 and self.y <= 768-65): # PONER EL LIMITE DE MITAD DE ESCENARIO
+			if (self.orientation == 1 and self.y > 95) or \
+				(self.orientation == -1 and self.y > 768/2 + 95):
 				self.y -= time*espacio
 		if direction == "right":
-			if self.x <= 768-65: # No estamos en los límites del escenario
-				self.x += min(time*espacio,768-65)
+			if self.x < 768-96:
+				self.x += min(time*espacio,768-100)
 		if direction == "down":
-			if (self.y >= 65 and self.y <= 768/2) or (self.y >= 768/2 and self.y <= 768-65): # PONER EL LIMITE DE MITAD DE ESCENARIO
+			if (self.orientation == 1 and self.y < 768/2-95) or \
+				(self.orientation == -1 and self.y < 768-100):
 				self.y += time*espacio
 
 	def shoot(self, direction):
 		if not self.cdShoot:
 			if direction == "left":
-				self.bang = ((self.x, self.y+35),(-0.70,-1)) # 0.7 is sen and cos of 45º
+				self.bang = ((self.x, self.y+35),(-0.70,self.orientation)) # 0.7 is sen and cos of 45º
 			if direction == "head-on":
-				self.bang = ((self.x, self.y+35),(0,-1))
+				self.bang = ((self.x, self.y+35),(0,self.orientation))
 			if direction == "right":
-				self.bang = ((self.x, self.y+35),(0.70,-1))
+				self.bang = ((self.x, self.y+35),(0.70,self.orientation))
 			self.cdShoot = 6
 
 

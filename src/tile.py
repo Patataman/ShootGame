@@ -34,7 +34,7 @@ class Tile():
         for i in range(0,MAP_HEIGHT):
             for j in range(0,MAP_WIDTH):
                 #centerx and centery + 32 because it's the center, not a corner
-                self.tileMap_rect[i][j].centerx = 64*i+32
-                self.tileMap_rect[i][j].centery = 64*j+32
-                screen.blit(self.tileMap[j][i], self.tileMap_rect[i][j])
+                self.tileMap_rect[j][i].centerx = 64*i+32
+                self.tileMap_rect[j][i].centery = 64*j+32
+                screen.blit(self.tileMap[j][i], self.tileMap_rect[j][i])
 

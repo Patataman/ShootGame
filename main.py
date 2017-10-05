@@ -1,16 +1,17 @@
-import pygame
+import pygame, os
 from pygame.locals import *
 from src.tile import Tile
 from src.gunman import Gunman
 from src.bullet import Bullet
 
 bullets = pygame.sprite.Group()
-player1 = Gunman(1, "keyboard")
+player1 = Gunman(1, "keyboard", "assets"+os.sep+"img"+os.sep+"sprites"+os.sep+"BuffSpriteTT.png", 768/2, 768/4)
+player2 = Gunman(2, "keyboard", "assets"+os.sep+"img"+os.sep+"sprites"+os.sep+"PinguSpriteTT.png", 768/2, 768-768/4)
 #Game itself
 def loop():
     #------------- Init -------------
     #Display a window of 768x768
-    window = pygame.display.set_mode([768,768])
+    window = pygame.display.set_mode([832,768])
     #Window name
     pygame.display.set_caption("ShootGame")
     #Variables
@@ -55,6 +56,7 @@ def on_event(time, event):
         # Controles Player1
 
         player1.actionKeyboard(keys, time)
+        player2.actionKeyboard(keys, time)
 
             # Controles Player2
             #if self.player2.device == "keyboard":
@@ -65,9 +67,16 @@ def on_event(time, event):
 
 def on_update(time):
     player1.update()
+    player2.update()
+
     if player1.bang:
         bullets.add(Bullet(player1.bang[0], player1.bang[1]))
         player1.bang = None
+
+    if player2.bang:
+        bullets.add(Bullet(player2.bang[0], player2.bang[1]))
+        player2.bang = None
+
     bullets.update()
 
 def on_draw(window, tileMap):
@@ -77,6 +86,7 @@ def on_draw(window, tileMap):
         window.blit(bullet.image, bullet.rect)
     #bullets.draw(window)
     window.blit(player1.image, player1.rect)
+    window.blit(player2.image, player2.rect)
 
 
     #screen.blit(img, img_rect)
