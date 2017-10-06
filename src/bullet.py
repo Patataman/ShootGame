@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from pygame import sprite
 from pygame.locals import *
 from .helpers import *
@@ -17,12 +19,19 @@ class Bullet(sprite.Sprite):
 		No podrá salirse de los límites del escenario.
 		No podrá avanzar si está ejecutando otra acción que no sea salto.
 		"""
-		espacio = 15
+		espacio = 14
 		self.x += espacio*self.vector[0]
 		self.y += espacio*self.vector[1]
 
-	def update(self):
+	def update(self, player1, player2):
 		##### Se calculan los atributos necesarios para las colisiones. Da igual si es 0 o 1, ya que sólo varía el color
 		self.move()
 		self.rect = self.image.get_rect()
 		self.rect.center = (self.x, self.y)
+		if sprite.collide_rect(self, player1):
+			player1.getHurt()
+			self.y = 900
+		if sprite.collide_rect(self, player2):
+			player2.getHurt()
+			self.y = 900
+

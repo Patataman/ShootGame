@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from pygame import sprite
 from pygame.locals import *
 from .helpers import *
@@ -24,6 +26,7 @@ class Gunman(sprite.Sprite):
 		self.x = posX         #X inicial
 		self.y = posY         #Y inicial	
 		self.cdShoot = 0
+		self.cdHurt = 0
 		# Atributos necesario para calcular colisiones entre sprites
 		self.image = None 
 		self.rect = None
@@ -61,7 +64,7 @@ class Gunman(sprite.Sprite):
 		ficha["sufferBack"] = sprite_ficha.subsurface((64, 3*64, width, height))
 
 		for i in range(0,5):
-			h = load_image("assets"+os.sep+"img"+os.sep+"heart.png")
+			h = load_image("assets"+os.sep+"img"+os.sep+"sprites"+os.sep+"heart1.png")
 			h_rect = h.get_rect()
 			h_rect.centerx = 768+32
 			if self.orientation == 1:
@@ -76,6 +79,23 @@ class Gunman(sprite.Sprite):
 		sprite = None
 		if self.current_frame == 20:
 			self.current_frame = 0
+
+		if self.orientation == -1:
+			if self.cdHurt > 0:
+				self.cdHurt -= 1
+				return self.sprites["sufferBack"]
+			if self.current_frame < 5:
+				sprite = self.sprites["back"][0]
+			if (self.current_frame >= 5 and self.current_frame <= 10) or (self.current_frame >= 15 and self.current_frame < 20):
+				sprite = self.sprites["back"][1]
+			if self.current_frame >= 10 and self.current_frame < 15:
+				sprite = self.sprites["back"][2]
+			return sprite
+
+		if self.cdHurt > 0:
+			self.cdHurt -= 1
+			return self.sprites["sufferFront"]
+
 		if self.cdShoot > 3:
 			if self.current_frame < 5:
 				sprite = self.sprites["frontAttack"][0]
@@ -118,12 +138,12 @@ class Gunman(sprite.Sprite):
 	def shoot(self, direction):
 		if not self.cdShoot:
 			if direction == "left":
-				self.bang = ((self.x, self.y+35),(-0.70,self.orientation)) # 0.7 is sen and cos of 45º
+				self.bang = ((self.x, self.y+35*self.orientation),(-0.70,self.orientation)) # 0.7 is sen and cos of 45º
 			if direction == "head-on":
-				self.bang = ((self.x, self.y+35),(0,self.orientation))
+				self.bang = ((self.x, self.y+35*self.orientation),(0,self.orientation))
 			if direction == "right":
-				self.bang = ((self.x, self.y+35),(0.70,self.orientation))
-			self.cdShoot = 6
+				self.bang = ((self.x, self.y+35*self.orientation),(0.70,self.orientation))
+			self.cdShoot = 8
 
 
 	def actionKeyboard(self, keys, time):
@@ -152,3 +172,8 @@ class Gunman(sprite.Sprite):
 		# Actualizamos frames
 		self.current_frame += 1
 		self.cdShoot = max(0,self.cdShoot-1)
+
+	def getHurt(self):
+		self.heart.pop()
+		self.cdHurt = 4
+
