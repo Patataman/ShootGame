@@ -66,12 +66,13 @@ def on_event(time, event):
         player2.actionKeyboard(keys, time)
 
 def on_update(time):
+    global countdown
+
     if countdown > 0:
 
         player1.update()
         player2.update()
 
-        global countdown
         #countdown -= time/1000
 
         if player1.bang:
